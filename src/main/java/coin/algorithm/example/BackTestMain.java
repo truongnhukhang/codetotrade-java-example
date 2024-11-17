@@ -1,5 +1,6 @@
 package coin.algorithm.example;
 
+import coin.algorithm.example.bot.MyMacdBot;
 import coin.algorithm.example.bot.RSIBot;
 import coin.algorithm.server.BackTestServer;
 import org.slf4j.Logger;
@@ -12,7 +13,7 @@ public class BackTestMain {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         log.info("Starting BackTest {}", RSIBot.class);
-        BackTestServer server = new BackTestServer(8888, RSIBot.class);
+        BackTestServer server = new BackTestServer(8888, MyMacdBot.class);
         server.start();
         server.blockUntilShutdown();
     }
