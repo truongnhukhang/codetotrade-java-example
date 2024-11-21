@@ -15,19 +15,20 @@ public class MyMacdBot extends BaseBot {
     private RSIIndicator rsi;
     private MACDIndicator macd;
     private EMAIndicator signal;
-
+    private double tp;
+    private double sl;
     @Override
     public void init(Map<String, String> config) {
         BarSeries series = getBarSeries(); // Assume this method exists in BaseBot
         ClosePriceIndicator closePrice = new ClosePriceIndicator(series);
 
         int rsiPeriod = Integer.parseInt(config.get("rsi"));
-        this.rsi = new RSIIndicator(closePrice, rsiPeriod);
-
         int slow = Integer.parseInt(config.get("slow"));
         int fast = Integer.parseInt(config.get("fast"));
         int signalPeriod = Integer.parseInt(config.get("signal"));
-
+        tp = Double.parseDouble(config.get("tp"));
+        sl = Double.parseDouble(config.get("sl"));
+        this.rsi = new RSIIndicator(closePrice, rsiPeriod);
         this.macd = new MACDIndicator(closePrice, fast, slow);
         this.signal = new EMAIndicator(macd, signalPeriod);
     }
@@ -67,8 +68,8 @@ public class MyMacdBot extends BaseBot {
         Bar currentBar = getBarSeries().getBar(idx);
         double btcAmount = 0.1;
         double entryPrice = currentBar.getClosePrice().doubleValue();
-        double takeProfit = currentBar.getClosePrice().doubleValue() * 1.03;
-        double stopLoss = currentBar.getClosePrice().doubleValue() * 0.98;
+        double takeProfit = currentBar.getClosePrice().doubleValue() * (1 + tp/100);
+        double stopLoss = currentBar.getClosePrice().doubleValue() * (1- sl/100);
         String tradeLog = String.format("MyMacdBot Buy, MACD-SIGNAL:%f-%f,PREV(MACD-SIGNAL):%f-%f, RSI: %f",
                 macd.getValue(idx).doubleValue(),signal.getValue(idx).doubleValue(), macd.getValue(idx - 1).doubleValue(),
                 signal.getValue(idx - 1).doubleValue(), rsi.getValue(idx).doubleValue());
@@ -80,8 +81,8 @@ public class MyMacdBot extends BaseBot {
         Bar currentBar = getBarSeries().getBar(idx);
         double btcAmount = 0.1;
         double entryPrice = currentBar.getClosePrice().doubleValue();
-        double takeProfit = currentBar.getClosePrice().doubleValue() * 0.97;
-        double stopLoss = currentBar.getClosePrice().doubleValue() * 1.02;
+        double takeProfit = currentBar.getClosePrice().doubleValue() * (1 - tp/100);
+        double stopLoss = currentBar.getClosePrice().doubleValue() * (1+ sl/100);
         String tradeLog = String.format("MyMacdBot Sell, MACD-SIGNAL:%f-%f,PREV(MACD-SIGNAL):%f-%f, RSI: %f",
                 macd.getValue(idx).doubleValue(),signal.getValue(idx).doubleValue(), macd.getValue(idx - 1).doubleValue(),
                 signal.getValue(idx - 1).doubleValue(), rsi.getValue(idx).doubleValue());
