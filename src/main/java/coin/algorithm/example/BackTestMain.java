@@ -1,5 +1,6 @@
 package coin.algorithm.example;
 
+import coin.algorithm.example.bot.MyChartingBot;
 import coin.algorithm.example.bot.MyMacdBot;
 import coin.algorithm.example.bot.MyMacdMultiTimeFrameTestBot;
 import coin.algorithm.example.bot.RSIBot;
@@ -15,7 +16,7 @@ public class BackTestMain {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         log.info("Starting BackTest {}", MyMacdBot.class);
-        BackTestServer server = new BackTestServer(8888, MyMacdMultiTimeFrameTestBot.class);
+        BackTestServer server = new BackTestServer(8888, MyChartingBot.class);
 //        BinanceServer server = new BinanceServer("", "", false, 8888, MyMacdBot.class);
         server.start();
         server.blockUntilShutdown();
