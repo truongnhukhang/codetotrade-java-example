@@ -2,6 +2,9 @@ package coin.algorithm.example.bot;
 
 import coin.algorithm.domain.BaseBot;
 import coin.algorithm.domain.TradeMetadata;
+import coin.algorithm.domain.chart.Chart;
+import coin.algorithm.domain.chart.Plot;
+import coin.algorithm.domain.chart.PlotStyle;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.indicators.EMAIndicator;
@@ -11,6 +14,7 @@ import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.num.Num;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Map;
 
 public class MyMacdMultiTimeFrameTestBot extends BaseBot {
@@ -36,6 +40,21 @@ public class MyMacdMultiTimeFrameTestBot extends BaseBot {
         this.rsi = new RSIIndicator(closePrice, rsiPeriod);
         this.macd = new MACDIndicator(closePrice1h, fast, slow);
         this.signal = new EMAIndicator(macd, signalPeriod);
+        Plot rsi14 = new Plot("rsi-14").withColor("#FFC0CB").withIndicator(rsi).withStyle(PlotStyle.LINE)
+                .withPricePrecision(2);
+        Chart rsiChart = new Chart("RsiChart");
+        rsiChart.setOverlay(false);
+        rsiChart.setPlotList(Arrays.asList(rsi14));
+
+        Plot macd_1h = new Plot("macd-1h").withColor("green").withIndicator(macd).withStyle(PlotStyle.LINE)
+                .withPricePrecision(2);
+        Plot signal_1h = new Plot("signal-1h").withColor("blue").withIndicator(signal).withStyle(PlotStyle.LINE)
+                .withPricePrecision(2);
+        Chart macdChart = new Chart("MacdChart");
+        macdChart.setOverlay(false);
+        macdChart.setPlotList(Arrays.asList(macd_1h, signal_1h));
+
+        this.setChartList(Arrays.asList(rsiChart, macdChart));
     }
 
     @Override

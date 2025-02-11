@@ -2,6 +2,9 @@ package coin.algorithm.example.bot;
 
 import coin.algorithm.domain.BaseBot;
 import coin.algorithm.domain.TradeMetadata;
+import coin.algorithm.domain.chart.Chart;
+import coin.algorithm.domain.chart.Plot;
+import coin.algorithm.domain.chart.PlotStyle;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.indicators.EMAIndicator;
@@ -10,6 +13,7 @@ import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.num.Num;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class MyMacdOverfitTestBot extends BaseBot {
